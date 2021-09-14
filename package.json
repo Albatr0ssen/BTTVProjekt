@@ -1,0 +1,22 @@
+{
+  "name": "bttvprojekt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Albatr0ssen/BTTVProjekt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Albatr0ssen/BTTVProjekt/issues"
+  },
+  "homepage": "https://github.com/Albatr0ssen/BTTVProjekt#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
