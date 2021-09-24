@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = poolConfig.port;
 const mysql = require('mysql');
 const poolConfig = require('./config.js')
 app.use(express.json({limit: '1mb'}));
