@@ -1,0 +1,37 @@
+*{
+    font-size: 1vw;
+}
+
+html{
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.active{
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: darkslateblue;
+}
+
+.loading{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.hidden{
+    display: none;
+}
+
+.emote-name{
+    font-size: 5rem;
+}
