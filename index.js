@@ -56,5 +56,5 @@ app.get("/db", (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log("HTTP Port Open (Port 3000)")
+    console.log(`Port Open At ${poolConfig.port}`)
 })

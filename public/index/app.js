@@ -32,3 +32,7 @@ function EmoteLoaded(index, emote){
         document.querySelector('div[emote="1"]').classList.remove("hidden");
     }
 }
+//hjawuifaw
+function HoverEventListener(){
+    document.querySelector('div[emote="0"]').addEventListener("mouseover")
+}
