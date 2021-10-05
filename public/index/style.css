@@ -7,6 +7,10 @@ html{
     overflow-y: hidden;
 }
 
+.emote:hover{
+    background-color: rgb(57, 44, 139);
+}
+
 .active{
     height: 100%;
     display: grid;

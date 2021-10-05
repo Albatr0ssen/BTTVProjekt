@@ -1,8 +1,9 @@
 GetEmote();
+ClickEmoteEventListener();
 
 async function GetEmote(){
     let emote;
-    await fetch('/emote').then(async res => {
+    await fetch('/getEmote').then(async res => {
         await res.json().then(res => {
             emote = res;
         })
@@ -32,7 +33,11 @@ function EmoteLoaded(index, emote){
         document.querySelector('div[emote="1"]').classList.remove("hidden");
     }
 }
-//hjawuifaw
-function HoverEventListener(){
-    document.querySelector('div[emote="0"]').addEventListener("mouseover")
+function ClickEmoteEventListener(){
+    document.querySelector('div[emote="0"]').addEventListener("click", () => {
+        document.querySelector('div[emote="0"]').remove();
+    })
+    document.querySelector('div[emote="1"]').addEventListener("click", () => {
+        document.querySelector('div[emote="1"]').remove();
+    })
 }
