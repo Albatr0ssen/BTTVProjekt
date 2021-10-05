@@ -29,52 +29,87 @@ app.get("/test", (req, res) => {
 })
 
 app.post("/postEmote", 
-body('requestID').isLength({min: 10}, {max: 10}),
-body('personalID').isLength({min: 10}, {max: 10}),
+body('sessionID').isLength({min: 10}, {max: 10}),
+body('userID').isLength({min: 10}, {max: 10}),
 body('emoteChoice').isLength({min: 0}, {max: 2}),
 (req, res) => {
-    // base64 requestID, base64 userID, emoteChoice
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    
-    let date = new Date();
-    // let userInfo = {
-    //     "sessionID": sessionID, 
-    //     "userID": "userID", 
-    //     "emotes": [emote1, emote2],
-    //     "emoteChoice": 2,
-    //     "submissionTime": date
-    // }
-
-    pool.query("SELECT Invite_ID from playfie_invite order by Invite_ID desc", (err, result, fields) => {
-        if(err){ return console.log('error: ' + err.message) }
-        
+    let sessionID = req.body.sessionID;
+    console.log(SessionEmotes(sessionID))
+    let userInfo = {
+        "sessionID": sessionID, 
+        "userID": "userID", 
+        "emotes": SessionEmotes(sessionID),
+        "emoteChoice": req.emoteChoice,
+        "submissionTime": new Date()
+    }
+    res.send({
+        "sessionID": sessionID, 
+        "userID": "userID", 
+        "emotes": SessionEmotes(sessionID),
+        "emoteChoice": req.emoteChoice,
+        "submissionTime": new Date()
     })
 })
 
 app.get("/getEmote", (req, res) => {
+    let sessionInfo = {};
     let random = [Math.floor(Math.random() * 485) + 1, Math.floor(Math.random() * 485) + 1];
     while(random[1] == random[0]){
         random[1] = Math.floor(Math.random() * 485) + 1;
     }
-    pool.query(`SELECT emoteName, emoteURL FROM emotes WHERE emoteID IN ( ${random[0]}, ${random[1]} )`, (err, response) => {
+    pool.query(`SELECT emoteName, emoteURL FROM emotes WHERE emoteID IN ( ${random[0]}, ${random[1]} )`, (err, response) =>  {
         if(err){ return console.log('error: ' + err.message) }
-        console.log(response)
-        // res.send(response)
-    })
-    let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_";
-    let sessionID = "";
-    for(let i = 0; i < 10; i++){
-        sessionID += base64[Math.floor((Math.random() * 64))];
-    }
-    sessions.push({
-        "sessionID": sessionID, 
-        "emotes": [emote1, emote2],
-    })
-    res.send(sessions)
+
+        sessionInfo.emotes = [{
+            "emoteName": response[0].emoteName,
+            "emoteURL": response[0].emoteURL
+        }, {
+            "emoteName": response[1].emoteName,
+            "emoteURL": response[1].emoteURL
+        }]
+
+        let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_";
+        let sessionID;
+        while(!IDInUse(sessionID)){
+            sessionID = "";
+            for(let i = 0; i < 10; i++){
+                sessionID += base64[Math.floor((Math.random() * 64))];
+            }
+        }
+        sessionInfo.sessionID = sessionID;
+        sessions.push(sessionInfo);
+        // console.log(sessionInfo)
+        res.send(sessionInfo)
+    })  
 })
+
+function IDInUse(sessionID){
+    if(sessionID == null){ return false; }
+    sessions.forEach(session => {
+        if(session.sessionID == sessionID){
+            return false;
+        }
+    })
+    return true;
+}
+
+function SessionEmotes(sessionID){
+    sessions.forEach(session => {
+        console.log(session.sessionID)
+        console.log(sessionID)
+        if(session.sessionID == sessionID){
+            console.log(session.emotes)
+            return session.emotes;
+        }
+        else{
+            console.log("YO")
+        }
+    })
+}
 
 app.listen(port, () => {
     console.log(`Port Open At ${poolConfig.port}`)
