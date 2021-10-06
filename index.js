@@ -45,9 +45,7 @@ body('emoteChoice').isLength({min: 0}, {max: 2}),
         "emoteChoice": req.body.emoteChoice,
         "submissionTime": new Date()
     }
-
     
-
     res.sendStatus(200);
 })
 

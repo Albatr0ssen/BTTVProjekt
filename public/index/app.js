@@ -2,6 +2,16 @@ let sessionID;
 EmotesSetup();
 
 function EmotesSetup(){
+    if(StorageTest() === true){
+        // let localStorage = window.localStorage;
+        if(localStorage.getItem('userID') == null){
+            //FETCH USERID
+        }
+    }
+    else{
+    
+    }
+
     GetEmote();
     document.querySelector('div[loading]').remove();
     document.querySelector('body').classList.remove("loading");
@@ -51,17 +61,15 @@ function PostEmote(choiceID){
     GetEmote();
 }
 
-// document.querySelector('div[emote="1"]').addEventListener("click", () => {
-//     document.querySelector('div[emote="1"]').remove();
-// })
-// fetch("postEmote",
-// {
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     method: "POST",
-//     body: JSON.stringify({
-//         sessionID: 2
-//     })
-// })
+function StorageTest(){
+    var test = 'test';
+    try {
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } 
+    catch(e) {
+        return false;
+    }
+}
+
