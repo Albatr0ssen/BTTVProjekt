@@ -19,15 +19,6 @@ var pool = mysql.createPool({
 
 app.use("/", express.static("public/index"))
 
-app.get("/test", (req, res) => {
-    let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_";
-    let thisID = "";
-    for(let i = 0; i < 10; i++){
-        thisID += base64[Math.floor((Math.random() * 64))];
-    }
-    res.send(thisID)
-})
-
 app.post("/postEmote", 
 body('sessionID').isLength({min: 10}, {max: 10}),
 body('userID').isLength({min: 10}, {max: 10}),
@@ -38,21 +29,26 @@ body('emoteChoice').isLength({min: 0}, {max: 2}),
         return res.status(400).json({ errors: errors.array() });
     }
     let sessionID = req.body.sessionID;
-    console.log(SessionEmotes(sessionID))
+    sessions.forEach(session => {
+        if(session.sessionID == sessionID){
+            emotes = session.emotes;
+        }
+        else{
+            res.sendStatus(400)
+        }
+    })
+
     let userInfo = {
         "sessionID": sessionID, 
-        "userID": "userID", 
-        "emotes": SessionEmotes(sessionID),
-        "emoteChoice": req.emoteChoice,
+        "userID": req.body.userID,
+        "emotes": emotes,
+        "emoteChoice": req.body.emoteChoice,
         "submissionTime": new Date()
     }
-    res.send({
-        "sessionID": sessionID, 
-        "userID": "userID", 
-        "emotes": SessionEmotes(sessionID),
-        "emoteChoice": req.emoteChoice,
-        "submissionTime": new Date()
-    })
+
+    
+
+    res.sendStatus(200);
 })
 
 app.get("/getEmote", (req, res) => {
@@ -82,7 +78,6 @@ app.get("/getEmote", (req, res) => {
         }
         sessionInfo.sessionID = sessionID;
         sessions.push(sessionInfo);
-        // console.log(sessionInfo)
         res.send(sessionInfo)
     })  
 })
