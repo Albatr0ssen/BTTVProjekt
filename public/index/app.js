@@ -2,14 +2,15 @@ let sessionID;
 EmotesSetup();
 
 function EmotesSetup(){
-    if(StorageTest() === true){
-        // let localStorage = window.localStorage;
+    if(StorageTest("local") === true){
         if(localStorage.getItem('userID') == null){
-            //FETCH USERID
+            //CREATE USERID AND APPLY
         }
     }
     else{
-    
+        if(StorageTest("session") == true){
+            //CREATE USERID
+        }
     }
 
     GetEmote();
@@ -61,15 +62,27 @@ function PostEmote(choiceID){
     GetEmote();
 }
 
-function StorageTest(){
+function StorageTest(type){
     var test = 'test';
-    try {
-        localStorage.setItem(test, test);
-        localStorage.removeItem(test);
-        return true;
-    } 
-    catch(e) {
-        return false;
+    if(type == "local"){
+        try {
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } 
+        catch(e) {
+            return false;
+        }
+    }
+    else if(type == "session"){
+        try {
+            sessionStorage.setItem(test, test);
+            sessionStorage.removeItem(test);
+            return true;
+        } 
+        catch(e) {
+            return false;
+        }
     }
 }
 
