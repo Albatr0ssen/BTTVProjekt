@@ -1,5 +1,8 @@
 *{
-    font-size: 1vw;
+    font-size: 3vh;
+    border: 0;
+    padding: 0;
+    margin: 0;
 }
 
 html{
@@ -10,6 +13,23 @@ html{
 .emote:hover{
     background-color: rgb(57, 44, 139);
 }
+
+.emote-img{
+    background-color: purple;
+    padding: 32px;
+    border-radius: 10px;
+}
+
+/* .emote-background{
+    width: 192px;
+    height: 192px;
+    border-radius: 1rem;
+    background-color: purple;
+}
+
+.emote-background:hover{
+    background-color: rgb(75, 0, 75);
+} */
 
 .active{
     height: 100%;

@@ -18,8 +18,8 @@ function EmotesSetup(){
     document.querySelector('body').classList.add("active");
     document.querySelector('div[emote="1"]').classList.remove("hidden");
     document.querySelector('div[emote="2"]').classList.remove("hidden");
-    ClickEmoteEventListener(1);
-    ClickEmoteEventListener(2);
+    // ClickEmoteEventListener(1);
+    // ClickEmoteEventListener(2);
 }
 
 
@@ -33,7 +33,9 @@ async function GetEmote(){
     })  
     for (let index = 0; index <= 1; index++) {
         document.querySelector(`div[emote="${index + 1}"]`).innerHTML = `
-        <img src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
+        <div class="emote-background center">
+            <img class="emote-img" src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
+        </div>
         <span>${emote[index].emoteName}</span>
         `
     }
