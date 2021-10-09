@@ -7,10 +7,13 @@ function EmotesSetup(){
             GetUserID("local");
         }
     }
-    
-    else if(StorageTest("session") == true){
+    else if(StorageTest("session") === true){
         GetUserID("session");
     }
+    else{
+        //IMPLEMENT IF userID = 1111111111 IN index.js (IT WILL WRITE TO DIFFERENT TABLE)
+    }
+    
 
     GetEmote();
     //REMOVES LOADING
@@ -54,7 +57,7 @@ function PostEmote(choiceID){
         method: "POST",
         body: JSON.stringify({
             "sessionID": sessionID,
-            "userID": localStorage.getItem("userID"),
+            "userID": UserID(),
             "emoteChoice": choiceID
         })
     })
@@ -108,4 +111,16 @@ async function GetUserID(type){
             }
         })
     })  
+}
+
+function UserID(){
+    if(StorageTest("local") === true){
+        return localStorage.getItem("userID");
+    }
+    else if(StorageTest("session") === true){
+        return sessionStorage.getItem("userID");
+    }
+    else{
+        return 1111111111;
+    }
 }
