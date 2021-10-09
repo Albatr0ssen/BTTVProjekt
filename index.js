@@ -52,10 +52,8 @@ app.post("/getUserID",
     } 
     console.log(userID)
     //WRITE TO USERS TABLE
-    let date = new Date()
-    date = date.toISOString().slice(0, 19).replace('T', ' ')
     pool.query(`INSERT INTO users (userID, timeCreated) 
-                VALUES ('${userID}', '${date}')`)
+                VALUES ('${userID}', '${SQLDate()}')`)
 
     //SEND BACK ID
     res.send(JSON.stringify({"userID": userID}))
@@ -101,16 +99,15 @@ body('emoteChoice').isLength({min: 0}, {max: 2}),
 (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        ErrorWriteToDB(req.body.userID);
         return res.status(400).json({ errors: errors.array() });
     }
     else{
-        console.log(req.body);
         let sessionID = req.body.sessionID;
         let emotes = [];
         for(let i = 0; i < sessions.length; i++){
             let session = sessions[i];
             if(session.sessionID == sessionID){
-                
                 emotes = session.emotes;
                 sessions.splice(i, 1)
                 break;
@@ -119,6 +116,7 @@ body('emoteChoice').isLength({min: 0}, {max: 2}),
 
         //CHECKS IF SESSION IS AVAILABLE
         if(emotes == []){
+            ErrorWriteToDB(req.body.userID)
             res.sendStatus(404)
         }
         else{
@@ -127,7 +125,7 @@ body('emoteChoice').isLength({min: 0}, {max: 2}),
                 "userID": req.body.userID,
                 "emotes": emotes,
                 "emoteChoice": req.body.emoteChoice,
-                "submissionTime": new Date().toISOString().slice(0, 19).replace('T', ' ')
+                "submissionTime": SQLDate()
             }
     
             pool.query(`INSERT INTO votes (emotes, emoteChoice, userID, submissionTime) 
@@ -149,9 +147,19 @@ function SessionIDInUse(sessionID){
     return true;
 }
 
+function ErrorWriteToDB(userID){
+    pool.query(`INSERT INTO error (userID, timeCreated) 
+                VALUES ('${userID}', '${SQLDate()}')`)
+}
+
 function Error(msg){
+    console.log(`${SQLDate()}: ${msg}`)
+}
+
+function SQLDate(){
     let date = new Date()
-    console.log(`${date.toISOString().slice(0, 19).replace('T', ' ')}: ${msg}`)
+    date = date.toISOString().slice(0, 19).replace('T', ' ')
+    return date;
 }
 
 app.listen(port, () => {

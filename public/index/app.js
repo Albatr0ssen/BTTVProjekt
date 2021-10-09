@@ -10,13 +10,9 @@ function EmotesSetup(){
     else if(StorageTest("session") === true){
         GetUserID("session");
     }
-    else{
-        //IMPLEMENT IF userID = 1111111111 IN index.js (IT WILL WRITE TO DIFFERENT TABLE)
-    }
-    
 
     GetEmote();
-    //REMOVES LOADING
+    //REMOVES LOADING SCREEN
     document.querySelector('div[loading]').remove();
     document.querySelector('body').classList.remove("loading");
     document.querySelector('body').classList.add("active");
