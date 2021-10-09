@@ -19,52 +19,49 @@ var pool = mysql.createPool({
 
 app.use("/", express.static("public/index"))
 
-app.post("/postEmote", 
-body('sessionID').isLength({min: 10}, {max: 10}),
-body('userID').isLength({min: 10}, {max: 10}),
-body('emoteChoice').isLength({min: 0}, {max: 2}),
-(req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    else{
-        let sessionID = req.body.sessionID;
-        let emotes = [];
-        for(let i = 0; i < sessions.length; i++){
-            let session = sessions[i];
-            if(session.sessionID == sessionID){
-                
-                emotes = session.emotes;
-                // console.log("session: ", session.emotes)
-                // console.log("emotes: ", emotes)
-                sessions.splice(i, 1)
-                break;
-            }
+app.post("/getUserID", 
+    body('storageType').isLength({min: 1}), 
+    (req, res) => {
+    //GENERATE ID AND CHECK IF IN USE (PRETTY MUCH IMPOSSIBLE)
+    let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_";
+    let userID;
+    while(true){
+        if(req.body.storageType == "local"){
+            userID = "L";
+        }
+        else if(res.body.storageType == "session"){
+            userID = "S";
         }
 
-        //CHECKS IF SESSION IS AVAILABLE
-        if(emotes == []){
-            res.sendStatus(404)
+        for(let i = 0; i < 9; i++){
+            userID += base64[Math.floor((Math.random() * 64))];
         }
+        let alreadyCreated = false;
+        pool.query(`SELECT userID FROM users`, (err, result) => {
+            if(err){ return Error(err.message) }
+            result.forEach(result => {
+                if(result.userID == userID){
+                    alreadyCreated = true;
+                }
+            })
+        })
 
-        let userInfo = {
-            "sessionID": sessionID, 
-            "userID": req.body.userID,
-            "emotes": emotes,
-            "emoteChoice": req.body.emoteChoice,
-            "submissionTime": new Date().toISOString().slice(0, 19).replace('T', ' ')
+        if(!alreadyCreated){
+            break;
         }
+    } 
+    console.log(userID)
+    //WRITE TO USERS TABLE
+    let date = new Date()
+    date = date.toISOString().slice(0, 19).replace('T', ' ')
+    pool.query(`INSERT INTO users (userID, timeCreated) 
+                VALUES ('${userID}', '${date}')`)
+
+    //SEND BACK ID
+    res.send(JSON.stringify({"userID": userID}))
         
-        console.log(userInfo.emotes)
-
-        pool.query(`INSERT INTO votes (emotes, emoteChoice, userID, submissionTime) 
-                    VALUES ('${JSON.stringify(userInfo.emotes)}','${userInfo.emoteChoice}', 
-                            '${userInfo.userID}', '${userInfo.submissionTime}')`)
-
-        res.send(userInfo);
-    }
 })
+
 
 app.get("/getEmote", (req, res) => {
     let sessionInfo = {};
@@ -72,20 +69,20 @@ app.get("/getEmote", (req, res) => {
     while(random[1] == random[0]){
         random[1] = Math.floor(Math.random() * 485) + 1;
     }
-    pool.query(`SELECT emoteName, emoteURL FROM emotes WHERE emoteID IN ( ${random[0]}, ${random[1]} )`, (err, response) =>  {
-        if(err){ return console.log('error: ' + err.message) }
+    pool.query(`SELECT emoteName, emoteURL FROM emotes WHERE emoteID IN ( ${random[0]}, ${random[1]} )`, (err, result) =>  {
+        if(err){ return Error(err.message) }
 
         sessionInfo.emotes = [{
-            "emoteName": response[0].emoteName,
-            "emoteURL": response[0].emoteURL
+            "emoteName": result[0].emoteName,
+            "emoteURL": result[0].emoteURL
         }, {
-            "emoteName": response[1].emoteName,
-            "emoteURL": response[1].emoteURL
+            "emoteName": result[1].emoteName,
+            "emoteURL": result[1].emoteURL
         }]
 
         let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_";
         let sessionID;
-        while(!IDInUse(sessionID)){
+        while(!SessionIDInUse(sessionID)){
             sessionID = "";
             for(let i = 0; i < 10; i++){
                 sessionID += base64[Math.floor((Math.random() * 64))];
@@ -97,7 +94,52 @@ app.get("/getEmote", (req, res) => {
     })  
 })
 
-function IDInUse(sessionID){
+app.post("/postEmote", 
+body('sessionID').isLength({min: 10}, {max: 10}),
+body('userID').isLength({min: 10}, {max: 10}),
+body('emoteChoice').isLength({min: 0}, {max: 2}),
+(req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    else{
+        console.log(req.body);
+        let sessionID = req.body.sessionID;
+        let emotes = [];
+        for(let i = 0; i < sessions.length; i++){
+            let session = sessions[i];
+            if(session.sessionID == sessionID){
+                
+                emotes = session.emotes;
+                sessions.splice(i, 1)
+                break;
+            }
+        }
+
+        //CHECKS IF SESSION IS AVAILABLE
+        if(emotes == []){
+            res.sendStatus(404)
+        }
+        else{
+            let userInfo = {
+                "sessionID": sessionID, 
+                "userID": req.body.userID,
+                "emotes": emotes,
+                "emoteChoice": req.body.emoteChoice,
+                "submissionTime": new Date().toISOString().slice(0, 19).replace('T', ' ')
+            }
+    
+            pool.query(`INSERT INTO votes (emotes, emoteChoice, userID, submissionTime) 
+                        VALUES ('${JSON.stringify(userInfo.emotes)}','${userInfo.emoteChoice}', 
+                                '${userInfo.userID}', '${userInfo.submissionTime}')`)
+
+            res.send(userInfo);
+        }
+    }
+})
+
+function SessionIDInUse(sessionID){
     if(sessionID == null){ return false; }
     sessions.forEach(session => {
         if(session.sessionID == sessionID){
@@ -107,18 +149,9 @@ function IDInUse(sessionID){
     return true;
 }
 
-function SessionEmotes(sessionID){
-    sessions.forEach(session => {
-        console.log(session.sessionID)
-        console.log(sessionID)
-        if(session.sessionID == sessionID){
-            console.log(session.emotes)
-            return session.emotes;
-        }
-        else{
-            console.log("YO")
-        }
-    })
+function Error(msg){
+    let date = new Date()
+    console.log(`${date.toISOString().slice(0, 19).replace('T', ' ')}: ${msg}`)
 }
 
 app.listen(port, () => {

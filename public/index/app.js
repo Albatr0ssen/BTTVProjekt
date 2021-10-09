@@ -4,16 +4,16 @@ EmotesSetup();
 function EmotesSetup(){
     if(StorageTest("local") === true){
         if(localStorage.getItem('userID') == null){
-            //CREATE USERID AND APPLY
+            GetUserID("local");
         }
     }
-    else{
-        if(StorageTest("session") == true){
-            //CREATE USERID
-        }
+    
+    else if(StorageTest("session") == true){
+        GetUserID("session");
     }
 
     GetEmote();
+    //REMOVES LOADING
     document.querySelector('div[loading]').remove();
     document.querySelector('body').classList.remove("loading");
     document.querySelector('body').classList.add("active");
@@ -37,7 +37,6 @@ async function GetEmote(){
         <img src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
         <span>${emote[index].emoteName}</span>
         `
-        
     }
 }
 
@@ -55,7 +54,7 @@ function PostEmote(choiceID){
         method: "POST",
         body: JSON.stringify({
             "sessionID": sessionID,
-            "userID": 1111111111,
+            "userID": localStorage.getItem("userID"),
             "emoteChoice": choiceID
         })
     })
@@ -86,3 +85,27 @@ function StorageTest(type){
     }
 }
 
+async function GetUserID(type){
+    await fetch("getUserID",
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+            "storageType": type
+        })
+    })
+    .then(async res => {
+        await res.json().then(res => {
+            if(type == "local"){
+                localStorage.setItem("userID", res.userID)
+                console.log(localStorage.getItem("userID"))        
+            }
+            else if(type == "session"){
+                sessionStorage.setItem("userID", res.userID)
+            }
+        })
+    })  
+}
