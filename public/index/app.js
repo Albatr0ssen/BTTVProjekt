@@ -20,8 +20,8 @@ function EmotesSetup(){
     document.querySelector('div[emote="2"]').classList.remove("hidden");
     // ClickEmoteEventListener(1);
     // ClickEmoteEventListener(2);
+    // ButtonEvents();
 }
-
 
 async function GetEmote(){
     let emote;
@@ -33,10 +33,12 @@ async function GetEmote(){
     })  
     for (let index = 0; index <= 1; index++) {
         document.querySelector(`div[emote="${index + 1}"]`).innerHTML = `
-        <div class="emote-background center">
-            <img class="emote-img" src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
-        </div>
-        <span>${emote[index].emoteName}</span>
+        <div class="emote-background-dark">
+            <div class="emote-background center">
+                <img class="emote-img .btn" src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
+                <span>${emote[index].emoteName}</span>
+            </div>
+        </div>   
         `
     }
 }
@@ -119,6 +121,20 @@ function UserID(){
         return sessionStorage.getItem("userID");
     }
     else{
-        return 1111111111;
+        return "1111111111";
     }
+}
+
+function ButtonEvents(){
+    document.querySelector('div[emote="1"]').addEventListener("mouseover", () => {
+        document.querySelector('div[emote="1"] div.emote-background-dark').classList.add("emote-move");
+        console.log("OVER 1")
+    });
+    document.querySelector('div[emote="1"]').addEventListener("mouseout", () => {
+        document.querySelector('div[emote="1"] div.emote-background-dark').classList.remove("emote-move");
+        console.log("OUT 1")
+    });
+    document.querySelector('div[emote="2"]').addEventListener("onmouseover", () => {
+        
+    });
 }
