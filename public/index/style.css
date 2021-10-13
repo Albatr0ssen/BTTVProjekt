@@ -10,6 +10,10 @@ html{
     overflow-y: hidden;
 }
 
+body{
+    padding: 0;
+}
+
 .emote:hover{
     background-color: rgb(57, 44, 139);
 }
@@ -23,6 +27,7 @@ html{
     position: relative;
     animation: emoteUp 1s ease-out 0s 1 reverse both running;
 } */
+
 .emote-img{
     padding: 32px;
     border-radius: 10px;
@@ -71,6 +76,21 @@ html{
     font-size: 5rem;
 }
 
+.peepo-hey-div{
+    position: absolute;
+    bottom: -9px;
+    right: 10px;
+}
+
+.peepo-hey{
+    transform: scaleX(-1);
+}
+
+.peepo-hey-text{
+    position: relative;
+    bottom: 70px;
+    left: 0px;
+}
 
 @keyframes emoteUp {
     from{
