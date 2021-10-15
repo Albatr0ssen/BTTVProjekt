@@ -23,11 +23,6 @@ body{
     animation: emoteUp 0.5s ease-out 0s 1 normal both running;
 }
 
-/* .emote-background{
-    position: relative;
-    animation: emoteUp 1s ease-out 0s 1 reverse both running;
-} */
-
 .emote-img{
     padding: 32px;
     border-radius: 10px;
@@ -41,17 +36,6 @@ body{
 .emote-background-dark{
     border-radius: 10px;
     background-color: brown;
-}
-
-/* .emote-background:hover{
-    background-color: rgb(75, 0, 75);
-} */
-
-.active{
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: darkslateblue;
 }
 
 .loading{
@@ -103,31 +87,23 @@ body{
     }
 }
 
+@media all and (orientation:landscape){
+    .active{
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background-color: darkslateblue;
+    }
+}
 
-@media all and (min-width:960px) and (max-width: 1024px) {
-    /* put your css styles in here */
-  }
-  
-  @media all and (min-width:801px) and (max-width: 959px) {
-    /* put your css styles in here */
-  }
-  
-  @media all and (min-width:769px) and (max-width: 800px) {
-    /* put your css styles in here */
-  }
-  
-  @media all and (min-width:569px) and (max-width: 768px) {
-    /* put your css styles in here */
-  }
-  
-  @media all and (min-width:481px) and (max-width: 568px) {
-    /* put your css styles in here */
-  }
-  
-  @media all and (min-width:321px) and (max-width: 480px) {
-    /* put your css styles in here */
-  }
-  
-  @media all and (min-width:0px) and (max-width: 320px) {
-    /* put your css styles in here */
-  }
+@media all and (orientation:portrait) {
+    .peepo-hey-div{
+        display: none;
+    }
+    .active{
+        height: 100%;
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        background-color: darkmagenta;
+    }
+}
