@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const fs = require('fs'),
+    https = require('https')
 const mysql = require('mysql');
 const { body, validationResult } = require('express-validator');
 const poolConfig = require('./config.js')
@@ -161,6 +163,14 @@ function SQLDate(){
     date = date.toISOString().slice(0, 19).replace('T', ' ')
     return date;
 }
+
+const sslServer = https.createServer(
+    {
+        key: fs.readFileSync('./tross.gg.key'),
+        cert: fs.readFileSync('./tross.gg.pem')
+    },
+    app
+)
 
 app.listen(port, () => {
     console.log(`Port Open At ${poolConfig.port}`)

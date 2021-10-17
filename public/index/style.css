@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
 *{
     font-size: 3vh;
     border: 0;
     padding: 0;
     margin: 0;
+    font-family: 'Righteous', cursive;
 }
 
 html{
@@ -10,12 +13,27 @@ html{
     overflow-y: hidden;
 }
 
+header{
+    height: 100px;
+    background-color: cadetblue;
+}
+
 body{
-    padding: 0;
+    height: 100%;
+}
+
+main{
+    display: grid; 
+    height: calc(100% - 100px);
 }
 
 .emote:hover{
     background-color: rgb(57, 44, 139);
+}
+
+.emote-background{
+    position: relative;
+    animation: emoteDown 0.5s ease-out 0s 1 normal both running;
 }
 
 .emote:hover .emote-background-dark .emote-background{
@@ -23,14 +41,19 @@ body{
     animation: emoteUp 0.5s ease-out 0s 1 normal both running;
 }
 
+
+.emote-name{
+    font-size: 5rem;
+}
+
 .emote-img{
-    padding: 32px;
     border-radius: 10px;
 }
 
 .emote-background{
     border-radius: 10px;
     background-color: rosybrown;
+    padding: 32px;
 }
 
 .emote-background-dark{
@@ -56,10 +79,6 @@ body{
     display: none;
 }
 
-.emote-name{
-    font-size: 5rem;
-}
-
 .peepo-hey-div{
     position: absolute;
     bottom: -9px;
@@ -74,6 +93,10 @@ body{
     position: relative;
     bottom: 70px;
     left: 0px;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 20px;
+    margin-right: 15px;
 }
 
 @keyframes emoteUp {
@@ -87,10 +110,18 @@ body{
     }
 }
 
+@keyframes emoteDown {
+    from{
+        top: -10px;
+        right: -10px;
+    }
+    to{
+        top: 0px;
+        right: 0px;
+    }
+}
 @media all and (orientation:landscape){
-    .active{
-        height: 100%;
-        display: grid;
+    main{
         grid-template-columns: 1fr 1fr;
         background-color: darkslateblue;
     }
@@ -100,9 +131,7 @@ body{
     .peepo-hey-div{
         display: none;
     }
-    .active{
-        height: 100%;
-        display: grid;
+    main{
         grid-template-rows: 1fr 1fr;
         background-color: darkmagenta;
     }

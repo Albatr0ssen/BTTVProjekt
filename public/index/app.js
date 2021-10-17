@@ -14,8 +14,8 @@ function EmotesSetup(){
     GetEmote();
     //REMOVES LOADING SCREEN
     document.querySelector('div[loading]').remove();
-    document.querySelector('body').classList.remove("loading");
-    document.querySelector('body').classList.add("active");
+    document.querySelector('main').classList.remove("loading");
+    document.querySelector('main').classList.add("active");
     document.querySelector('div[emote="1"]').classList.remove("hidden");
     document.querySelector('div[emote="2"]').classList.remove("hidden");
     HTMLAddon();
@@ -141,7 +141,7 @@ function ButtonEvents(){
 }
 
 function HTMLAddon(){
-    document.querySelector('body').innerHTML += `
+    document.querySelector('main').innerHTML += `
     <div class="peepo-hey-div">
         <span class="peepo-hey-text"> @Albatr0ssen in chat </span>
         <img class="peepo-hey" src="https://cdn.betterttv.net/emote/5c0e1a3c6c146e7be4ff5c0c/3x" alt="peepoHey">
