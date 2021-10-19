@@ -31,16 +31,15 @@ main{
     background-color: rgb(57, 44, 139);
 }
 
-.emote-background{
+.emote-down-animation{
     position: relative;
-    animation: emoteDown 0.5s ease-out 0s 1 normal both running;
+    animation: emoteDown 0.1s ease-out 0s 1 normal both running;
 }
 
 .emote:hover .emote-background-dark .emote-background{
     position: relative;
-    animation: emoteUp 0.5s ease-out 0s 1 normal both running;
+    animation: emoteUp 0.1s ease-out 0s 1 normal both running;
 }
-
 
 .emote-name{
     font-size: 5rem;

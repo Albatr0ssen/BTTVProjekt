@@ -21,7 +21,7 @@ function EmotesSetup(){
     HTMLAddon();
     // ClickEmoteEventListener(1);
     // ClickEmoteEventListener(2);
-    // ButtonEvents();
+    ButtonEvents();
 }
 
 async function GetEmote(){
@@ -128,15 +128,13 @@ function UserID(){
 
 function ButtonEvents(){
     document.querySelector('div[emote="1"]').addEventListener("mouseover", () => {
-        document.querySelector('div[emote="1"] div.emote-background-dark').classList.add("emote-move");
-        console.log("OVER 1")
+        document.querySelector('div[emote="1"] div.emote-background-dark div.emote-background').classList.add("emote-down-animation");
+        console.log("yo1")
     });
-    document.querySelector('div[emote="1"]').addEventListener("mouseout", () => {
-        document.querySelector('div[emote="1"] div.emote-background-dark').classList.remove("emote-move");
-        console.log("OUT 1")
-    });
-    document.querySelector('div[emote="2"]').addEventListener("onmouseover", () => {
-        
+
+    document.querySelector('div[emote="2"]').addEventListener("mouseover", () => {
+        document.querySelector('div[emote="2"] div.emote-background-dark div.emote-background').classList.add("emote-down-animation");
+        console.log("yo2")
     });
 }
 
