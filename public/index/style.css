@@ -121,8 +121,11 @@ main{
 }
 @media all and (orientation:landscape){
     main{
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 0.01fr 1fr;
         background-color: darkslateblue;
+    }
+    .divider{
+        background-color: rgb(42, 32, 104);
     }
 }
 
@@ -133,5 +136,8 @@ main{
     main{
         grid-template-rows: 1fr 1fr;
         background-color: darkmagenta;
+    }
+    .divider{
+        display: hidden;
     }
 }
