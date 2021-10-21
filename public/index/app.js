@@ -1,3 +1,6 @@
+//TODO
+//ADD LOADING SYMBOL WHILE EMOTES
+
 let sessionID;
 EmotesSetup();
 
@@ -12,13 +15,6 @@ function EmotesSetup(){
     }
 
     GetEmote();
-    //REMOVES LOADING SCREEN
-    document.querySelector('div[loading]').remove();
-    document.querySelector('main').classList.remove("loading");
-    document.querySelector('main').classList.add("active");
-    document.querySelector('div[emote="1"]').classList.remove("hidden");
-    document.querySelector('div[emote="2"]').classList.remove("hidden");
-    HTMLAddon();
     ClickEmoteEventListener(1);
     ClickEmoteEventListener(2);
     ButtonEvents();
@@ -26,6 +22,9 @@ function EmotesSetup(){
 
 async function GetEmote(){
     let emote;
+    document.querySelector("main img.loading").classList.remove("none")
+    document.querySelector(`div[emote="1"]`).classList.add("hidden")
+    document.querySelector(`div[emote="2"]`).classList.add("hidden")
     await fetch('/getEmote').then(async res => {
         await res.json().then(res => {
             sessionID = res.sessionID;
@@ -53,6 +52,9 @@ function LoadEmotes(images){
     if(images[0][0] == true && images[1][0] == true){
         document.querySelector(`div[emote="1"]`).innerHTML = images[0][1];
         document.querySelector(`div[emote="2"]`).innerHTML = images[1][1];
+        document.querySelector(`div[emote="1"]`).classList.remove("hidden")
+        document.querySelector(`div[emote="2"]`).classList.remove("hidden")
+        document.querySelector("main img.loading").classList.add("none")
     }
 }
 
@@ -141,20 +143,9 @@ function UserID(){
 function ButtonEvents(){
     document.querySelector('div[emote="1"]').addEventListener("mouseover", () => {
         document.querySelector('div[emote="1"] div.emote-background-dark div.emote-background').classList.add("emote-down-animation");
-        console.log("yo1")
     });
 
     document.querySelector('div[emote="2"]').addEventListener("mouseover", () => {
         document.querySelector('div[emote="2"] div.emote-background-dark div.emote-background').classList.add("emote-down-animation");
-        console.log("yo2")
     });
-}
-
-function HTMLAddon(){
-    document.querySelector('main').innerHTML += `
-    <div class="peepo-hey-div">
-        <span class="peepo-hey-text"> @Albatr0ssen in chat </span>
-        <img class="peepo-hey" src="https://cdn.betterttv.net/emote/5c0e1a3c6c146e7be4ff5c0c/3x" alt="peepoHey">
-    </div
-    `
 }
