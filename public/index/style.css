@@ -11,6 +11,7 @@
 html{
     height: 100%;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 header{
@@ -39,6 +40,22 @@ main{
 .emote:hover .emote-background-dark .emote-background{
     position: relative;
     animation: emoteUp 0.1s ease-out 0s 1 normal both running;
+}
+
+.left-emote-out{
+    animation: leftemoteout 1s ease-out 0s 1 normal both running;
+}
+
+.left-emote-in{
+
+}
+
+.right-emote-out{
+    animation: rightemoteout 0.1s ease-out 0s 1 normal both running;
+}
+
+.right-emote-in{
+
 }
 
 .emote-name{
@@ -98,6 +115,8 @@ main{
     margin-right: 15px;
 }
 
+
+
 @keyframes emoteUp {
     from{
         top: 0;
@@ -119,6 +138,7 @@ main{
         right: 0px;
     }
 }
+
 @media all and (orientation:landscape){
     main{
         grid-template-columns: 1fr 0.01fr 1fr;
@@ -127,6 +147,26 @@ main{
     .divider{
         background-color: rgb(42, 32, 104);
     }
+    @keyframes leftemoteout{
+        from{
+            top: 0;
+            right: 0;
+        }
+        to{
+            top: 0px;
+            right: -50vw;
+        }
+    }
+    @keyframes RightEmoteOut{
+        from{
+            top: 0;
+            right: 0;
+        }
+        to{
+            top: 0px;
+            right: -50vw;
+        }
+    }
 }
 
 @media all and (orientation:portrait) {
@@ -134,7 +174,7 @@ main{
         display: none;
     }
     main{
-        grid-template-rows: 1fr 1fr;
+        grid-template-rows: 1fr 0.01fr 1fr;
         background-color: darkmagenta;
     }
     .divider{
