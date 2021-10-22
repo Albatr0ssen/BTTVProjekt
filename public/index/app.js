@@ -1,6 +1,3 @@
-//TODO
-//ADD LOADING SYMBOL WHILE EMOTES
-
 let sessionID;
 EmotesSetup();
 
