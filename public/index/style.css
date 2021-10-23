@@ -10,8 +10,7 @@
 
 html{
     height: 100%;
-    overflow-y: none;
-    overflow-x: none;
+    overflow: hidden;
 }
 
 header{
@@ -26,6 +25,11 @@ body{
 main{
     display: grid; 
     height: calc(100% - 100px);
+    background-color: darkslateblue;
+}
+
+.divider{
+    background-color: rgb(42, 32, 104);
 }
 
 .emote:hover{
@@ -136,11 +140,8 @@ main{
 @media all and (orientation:landscape){
     main{
         grid-template-columns: 1fr 0.01fr 1fr;
-        background-color: darkslateblue;
     }
-    .divider{
-        background-color: rgb(42, 32, 104);
-    }
+    
     @keyframes leftemoteout{
         from{
             top: 0;
@@ -169,9 +170,5 @@ main{
     }
     main{
         grid-template-rows: 1fr 0.01fr 1fr;
-        background-color: darkmagenta;
-    }
-    .divider{
-        display: none;
     }
 }
