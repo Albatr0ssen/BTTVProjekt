@@ -164,13 +164,13 @@ function SQLDate(){
     return date;
 }
 
-const sslServer = https.createServer(
-    {
-        key: fs.readFileSync('./tross.gg.key'),
-        cert: fs.readFileSync('./tross.gg.pem')
-    },
-    app
-)
+// const sslServer = https.createServer(
+//     {
+//         key: fs.readFileSync('./tross.gg.key'),
+//         cert: fs.readFileSync('./tross.gg.pem')
+//     },
+//     app
+// )
 
 app.listen(port, () => {
     console.log(`Port Open At ${poolConfig.port}`)
