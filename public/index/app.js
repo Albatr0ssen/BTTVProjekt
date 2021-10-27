@@ -18,10 +18,15 @@ function EmotesSetup(){
 }
 
 async function GetEmote(){
-    let emote;
-    document.querySelector("main img.loading").classList.remove("none")
+    let randomLoading = Math.floor(Math.random() * 3);
+    if(randomLoading == 0){document.querySelector("#loading").src = "img/widepeepoHappy.png"}
+    else if(randomLoading == 1){document.querySelector("#loading").src = "img/widepeepoSad.png"}
+    else if(randomLoading == 2){document.querySelector("#loading").src = "img/WideHardo.png"}
+    
+    document.querySelector("#loading").classList.remove("none")
     document.querySelector(`div[emote="1"]`).classList.add("hidden")
     document.querySelector(`div[emote="2"]`).classList.add("hidden")
+    // let emote;
     await fetch('/getEmote').then(async res => {
         await res.json().then(res => {
             sessionID = res.sessionID;
@@ -51,7 +56,7 @@ function LoadEmotes(images){
         document.querySelector(`div[emote="2"]`).innerHTML = images[1][1];
         document.querySelector(`div[emote="1"]`).classList.remove("hidden")
         document.querySelector(`div[emote="2"]`).classList.remove("hidden")
-        document.querySelector("main img.loading").classList.add("none")
+        document.querySelector("#loading").classList.add("none")
     }
 }
 
