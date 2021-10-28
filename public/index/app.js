@@ -26,7 +26,7 @@ async function GetEmote(){
     document.querySelector("#loading").classList.remove("none")
     document.querySelector(`div[emote="1"]`).classList.add("hidden")
     document.querySelector(`div[emote="2"]`).classList.add("hidden")
-    // let emote;
+    
     await fetch('/getEmote').then(async res => {
         await res.json().then(res => {
             sessionID = res.sessionID;
@@ -38,7 +38,7 @@ async function GetEmote(){
         let emoteCard = `
         <div class="emote-background-dark">
             <div class="emote-background center">
-                <img class="emote-img .btn" src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
+                <img class=".btn" src="${emote[index].emoteURL}" alt="${emote[index].emoteName}">
                 <span>${emote[index].emoteName}</span>
             </div>
         </div>   
@@ -50,7 +50,6 @@ async function GetEmote(){
 }
 
 function LoadEmotes(images){
-    console.log(images[0][0], images[1][0])
     if(images[0][0] == true && images[1][0] == true){
         document.querySelector(`div[emote="1"]`).innerHTML = images[0][1];
         document.querySelector(`div[emote="2"]`).innerHTML = images[1][1];
@@ -65,19 +64,19 @@ function ClickEmoteEventListener(choiceID){
 }
 
 function PostEmote(choiceID){
-    // fetch("postEmote",
-    // {
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         "sessionID": sessionID,
-    //         "userID": UserID(),
-    //         "emoteChoice": choiceID
-    //     })
-    // })
+    fetch("postEmote",
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+            "sessionID": sessionID,
+            "userID": UserID(),
+            "emoteChoice": choiceID
+        })
+    })
     GetEmote();
 }
 

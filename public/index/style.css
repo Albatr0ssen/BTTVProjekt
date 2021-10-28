@@ -14,9 +14,10 @@ html{
 }
 
 header{
-    height: 100px;
     background-color: #352b74;
     color: white;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
 }
 
 body{
@@ -25,7 +26,7 @@ body{
 
 main{
     display: grid; 
-    height: calc(100% - 100px);
+    height: calc(100% - 1rem);
     background-color: darkslateblue;
 }
 
@@ -51,18 +52,14 @@ main{
     font-size: 5rem;
 }
 
-.emote-img{
-    border-radius: 10px;
-}
-
 .emote-background{
-    border-radius: 10px;
+    border-radius: inherit;
     background-color: rosybrown;
-    padding: 32px;
+    padding: 0.7rem;
 }
 
 .emote-background-dark{
-    border-radius: 10px;
+    border-radius: 0.4rem;
     background-color: brown;
 }
 
@@ -114,6 +111,7 @@ main{
 
 .peepo-hey{
     transform: scaleX(-1);
+    width: 3rem;
 }
 
 .peepo-hey-text{
@@ -125,8 +123,6 @@ main{
     border-radius: 20px;
     margin-right: 15px;
 }
-
-
 
 @keyframes emoteUp {
     from{
@@ -162,5 +158,8 @@ main{
     }
     main{
         grid-template-rows: 1fr 0.01fr 1fr;
+    }
+    header{
+        display: none;
     }
 }
