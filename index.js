@@ -21,6 +21,19 @@ var pool = mysql.createPool({
 
 app.use("/", express.static("public/index"))
 
+app.use("/info", express.static("public/info"))
+
+app.get("/getVotes", (req, res) => {
+    pool.query(`SELECT emotes, emoteChoice FROM votes`, (err, response) =>  {
+        let votes = []
+        response.forEach(vote => {
+            let emotes = JSON.parse(vote.emotes)  
+            votes.push(emotes[vote.emoteChoice - 1])
+        });
+        res.send(votes);
+    })  
+})
+
 app.post("/getUserID", 
     body('storageType').isLength({min: 1}), 
     (req, res) => {

@@ -18,6 +18,7 @@ header{
     color: white;
     padding-top: 2vh;
     padding-bottom: 2vh;
+    text-align: center;
 }
 
 body{
@@ -80,9 +81,48 @@ main{
 
 #loading{
     position: absolute;
-    top: calc(50% - 87.5px);
+    top: calc(50% + 2vh);
     left: calc(50% - 170px);
     animation: spin 0.9s linear infinite;
+}
+
+.peepo-hey-div{
+    position: absolute;
+    bottom: -9px;
+    right: 10px;
+}
+
+.peepo-hey{
+    transform: scaleX(-1);
+    width: 3rem;
+}
+
+.peepo-hey-text{
+    position: relative;
+    bottom: 2rem;
+    left: 0px;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 20px;
+    margin-right: 15px;
+}
+
+@media all and (orientation:landscape){
+    main{
+        grid-template-columns: 1fr 0.01fr 1fr;
+    }
+}
+
+@media all and (orientation:portrait) {
+    .peepo-hey-div{
+        display: none;
+    }
+    main{
+        grid-template-rows: 1fr 0.01fr 1fr;
+    }
+    header{
+        display: none;
+    }
 }
 
 @keyframes spin { 
@@ -101,27 +141,6 @@ main{
     90%{
         transform:rotate(0deg);
     }  
-}
-
-.peepo-hey-div{
-    position: absolute;
-    bottom: -9px;
-    right: 10px;
-}
-
-.peepo-hey{
-    transform: scaleX(-1);
-    width: 3rem;
-}
-
-.peepo-hey-text{
-    position: relative;
-    bottom: 70px;
-    left: 0px;
-    background-color: whitesmoke;
-    padding: 10px;
-    border-radius: 20px;
-    margin-right: 15px;
 }
 
 @keyframes emoteUp {
@@ -143,23 +162,5 @@ main{
     to{
         top: 0px;
         right: 0px;
-    }
-}
-
-@media all and (orientation:landscape){
-    main{
-        grid-template-columns: 1fr 0.01fr 1fr;
-    }
-}
-
-@media all and (orientation:portrait) {
-    .peepo-hey-div{
-        display: none;
-    }
-    main{
-        grid-template-rows: 1fr 0.01fr 1fr;
-    }
-    header{
-        display: none;
     }
 }
