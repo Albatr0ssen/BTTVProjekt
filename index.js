@@ -10,6 +10,7 @@ app.use(express.json({limit: '1mb'}));
 app.use(express.urlencoded({extended: true}))
 
 let sessions = [];
+let ranks = [];
 
 var pool = mysql.createPool({
     connectionLimit: 100,
@@ -23,12 +24,135 @@ app.use("/", express.static("public/index"))
 
 app.use("/info", express.static("public/info"))
 
+app.get("/getRanked", (req, res) => {
+    if(ranks.length != 0 && ranks[2] + 3600000 > Date.now()) {res.send([ranks[0], ranks[1]]);}
+    else{
+        pool.query(`SELECT emotes, emoteChoice FROM votes`, (err, response) =>  {
+            let winVotes = []
+            response.forEach(vote => {
+                let emotes = JSON.parse(vote.emotes)  
+                winVotes.push(emotes[vote.emoteChoice - 1])
+            });
+
+            pool.query(`SELECT emotes, emoteChoice FROM votes`, (err, response) =>  {
+                let loseVotes = []
+                response.forEach(vote => {
+                    let emotes = JSON.parse(vote.emotes)  
+                    if(vote.emoteChoice == 1){
+                        loseVotes.push(emotes[1])
+                    }
+                    else if(vote.emoteChoice == 2){
+                        loseVotes.push(emotes[0])
+                    }
+                    
+                });
+                let toplist = {}
+                winVotes.forEach(vote => {
+                    try{
+                        toplist[vote.emoteURL].voteCount += 1;
+                    }
+                    catch{
+                        toplist[vote.emoteURL] = {
+                            voteCount: 1,
+                            emote: vote
+                        };
+                    }
+                });
+
+                let botlist = {}
+                loseVotes.forEach(vote => {
+                    try{
+                        botlist[vote.emoteURL].voteCount += 1;
+                    }
+                    catch{
+                        botlist[vote.emoteURL] = {
+                            voteCount: 1,
+                            emote: vote
+                        };
+                    }
+                });
+                
+                let ranked = [];
+                for (let i = 0;  i < Object.values(toplist).length;i++) {
+                    let added = false;
+                    if(ranked.length == 0){
+                        ranked.push(Object.values(toplist)[i]);
+                        added = true
+                    }
+                    else{
+                        for (let j = 0; j < ranked.length; j++) {              
+                            if(Object.values(toplist)[i].voteCount > ranked[j].voteCount){
+                                ranked.splice(j, 0, Object.values(toplist)[i]);
+                                added = true
+                                break;
+                            }
+                        }
+                    }
+                    if(!added){
+                        ranked.push(Object.values(toplist)[i]);
+                    }
+                }
+
+                ranked.forEach(emote => {
+                    try{
+                        emote.ratio = emote.voteCount / (botlist[emote.emote.emoteURL].voteCount + emote.voteCount);
+                    }
+                    catch{
+                        emote.ratio = 1;
+                    }
+                });
+
+                let ratioRanked = [];
+                for (let i = 0;  i < ranked.length;i++) {
+                    let added = false;
+                    if(ranked.length == 0){
+                        ratioRanked.push(ranked[i]);
+                        added = true
+                    }
+                    else{
+                        for (let j = 0; j < ratioRanked.length; j++) {              
+                            if(ranked[i].ratio > ratioRanked[j].ratio){
+                                ratioRanked.splice(j, 0, ranked[i]);
+                                added = true
+                                break;
+                            }
+                        }
+                    }
+                    if(!added){
+                        ratioRanked.push(ranked[i]);
+                    }
+                }
+                dateNow = Date.now();
+                ranks = [ranked, ratioRanked, dateNow]
+                res.send([ranks[0], ranks[1]]);
+            })  
+        })             
+    }
+})
+
 app.get("/getVotes", (req, res) => {
     pool.query(`SELECT emotes, emoteChoice FROM votes`, (err, response) =>  {
         let votes = []
         response.forEach(vote => {
             let emotes = JSON.parse(vote.emotes)  
             votes.push(emotes[vote.emoteChoice - 1])
+        });
+        res.send(votes);
+    })  
+})
+
+app.get("/getLosing", (req, res) => {
+    pool.query(`SELECT emotes, emoteChoice FROM votes`, (err, response) =>  {
+        let votes = []
+        response.forEach(vote => {
+            let emotes = JSON.parse(vote.emotes)  
+            if(vote.emoteChoice == 1){
+                votes.push(emotes[1])
+            }
+            else if(vote.emoteChoice == 2){
+                votes.push(emotes[0])
+            }
+            
         });
         res.send(votes);
     })  
@@ -72,7 +196,6 @@ app.post("/getUserID",
 
     //SEND BACK ID
     res.send(JSON.stringify({"userID": userID}))
-        
 })
 
 

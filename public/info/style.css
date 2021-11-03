@@ -22,6 +22,10 @@ header{
     margin-bottom: 30px;
 }
 
+header > div{
+    margin-left: 100px;
+}
+
 main{
     display: flex;
     grid-column: 2;
@@ -32,10 +36,25 @@ main{
 
 .emote{
     display: grid;
-    grid-template-columns: 0.4fr 1fr 2fr 2fr;
+    grid-template-columns: 75px 600px 100px 100px;
     margin-bottom: 10px;
 }
 
 .emote-img{
     height: 50px;
+}
+
+.none{
+    display: none;
+}
+
+.filter-button{
+    background-color: rgb(157, 118, 118);
+    user-select: none;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 40px;
+}
+.filter-button:hover{
+    background-color: rgb(124, 93, 93);
 }
